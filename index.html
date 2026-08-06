@@ -45,10 +45,33 @@
         <span data-i18n="roomNumber">Số phòng</span>
         <input id="roomNumber" name="room_number" inputmode="numeric" autocomplete="off" required>
       </label>
+      <label>
+  <span data-i18n="cardCountLabel">Số lượng thẻ</span>
+
+  <input
+    id="cardCount"
+    name="card_count"
+    type="number"
+    min="1"
+    max="10"
+    value="1"
+    required
+  >
+</label>
 
       <div class="terms-box full">
         <h3 data-i18n="termsTitle">Quy định sử dụng thẻ phòng</h3>
-        <p data-i18n="termsText">Tôi xác nhận đã nhận thêm 01 thẻ phòng từ Sao Mai Phu My Resort. Tôi có trách nhiệm bảo quản và hoàn trả thẻ khi trả phòng. Nếu làm mất hoặc không hoàn trả thẻ, tôi đồng ý thanh toán phí bồi thường 200.000 VND/thẻ.</p>
+        <p>
+  <span data-i18n="rulePrefix">
+    Tôi xác nhận đã nhận thêm
+  </span>
+
+  <strong id="ruleCardCount">01</strong>
+
+  <span data-i18n="ruleSuffix">
+    thẻ phòng từ Sao Mai Phu My Resort. Tôi có trách nhiệm bảo quản và hoàn trả thẻ khi trả phòng. Nếu làm mất hoặc không hoàn trả thẻ, tôi đồng ý thanh toán phí bồi thường 200.000 VND/thẻ.
+  </span>
+</p>
       </div>
 
       <label class="agree full">
