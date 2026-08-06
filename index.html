@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#8f0015">
+  <title>Sao Mai Phu My Resort | Cấp thêm thẻ phòng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar no-print">
+    <div class="brand">
+      <img src="assets/sao-mai-logo.svg" alt="Sao Mai Phu My Resort">
+      <div>
+        <h1>SAO MAI PHU MY RESORT</h1>
+        <p data-i18n="subtitle">Phiếu xác nhận cấp thêm thẻ phòng</p>
+      </div>
+    </div>
+
+    <select id="language" aria-label="Language">
+      <option value="vi">VI</option>
+      <option value="en">EN</option>
+      <option value="zh">中文</option>
+      <option value="ko">한국어</option>
+    </select>
+  </header>
+
+  <main>
+    <section class="hero no-print">
+      <span class="eyebrow">ROOM KEY CARD</span>
+      <h2 data-i18n="heroTitle">Yêu cầu cấp thêm thẻ phòng</h2>
+      <p data-i18n="heroText">Vui lòng nhập thông tin khách và số phòng để tạo phiếu xác nhận.</p>
+    </section>
+
+    <form id="requestForm" class="card form-card no-print">
+      <label>
+        <span data-i18n="guestName">Tên khách</span>
+        <input id="guestName" name="guest_name" autocomplete="name" required>
+      </label>
+
+      <label>
+        <span data-i18n="roomNumber">Số phòng</span>
+        <input id="roomNumber" name="room_number" inputmode="numeric" autocomplete="off" required>
+      </label>
+
+      <div class="terms-box full">
+        <h3 data-i18n="termsTitle">Quy định sử dụng thẻ phòng</h3>
+        <p data-i18n="termsText">Tôi xác nhận đã nhận thêm 01 thẻ phòng từ Sao Mai Phu My Resort. Tôi có trách nhiệm bảo quản và hoàn trả thẻ khi trả phòng. Nếu làm mất hoặc không hoàn trả thẻ, tôi đồng ý thanh toán phí bồi thường 200.000 VND/thẻ.</p>
+      </div>
+
+      <label class="agree full">
+        <input id="agree" type="checkbox" required>
+        <span data-i18n="agreeText">Tôi đã đọc, hiểu và đồng ý với quy định trên.</span>
+      </label>
+
+      <div class="actions full">
+        <button type="submit" class="primary" data-i18n="createReceipt">Tạo phiếu xác nhận</button>
+        <button type="reset" class="secondary" data-i18n="reset">Nhập lại</button>
+      </div>
+    </form>
+
+    <section id="receipt" class="receipt hidden" aria-live="polite">
+      <div class="receipt-header">
+        <img src="assets/sao-mai-logo.svg" alt="Sao Mai Phu My Resort">
+        <div>
+          <h2 data-i18n="receiptTitle">PHIẾU XÁC NHẬN CẤP THÊM THẺ PHÒNG</h2>
+          <p>SAO MAI PHU MY RESORT</p>
+        </div>
+      </div>
+
+      <div class="rule"></div>
+
+      <div class="receipt-info">
+        <p><strong data-i18n="guestNameLabel">Họ và tên khách:</strong> <span id="rGuestName"></span></p>
+        <p><strong data-i18n="roomNumberLabel">Số phòng:</strong> <span id="rRoomNumber"></span></p>
+        <p><strong data-i18n="extraCardLabel">Số lượng thẻ cấp thêm:</strong> <span data-i18n="oneCard">01 thẻ</span></p>
+        <p><strong data-i18n="issuedAtLabel">Thời gian cấp:</strong> <span id="rIssuedAt"></span></p>
+      </div>
+
+      <div class="confirmation">
+        <h3 data-i18n="confirmationTitle">XÁC NHẬN CỦA KHÁCH</h3>
+        <p data-i18n="confirmationText">Tôi xác nhận đã nhận thêm 01 thẻ phòng từ Sao Mai Phu My Resort. Tôi có trách nhiệm bảo quản và hoàn trả thẻ khi trả phòng. Nếu làm mất hoặc không hoàn trả thẻ, tôi đồng ý thanh toán phí bồi thường 200.000 VND/thẻ.</p>
+      </div>
+
+      <p id="rPlaceDate" class="place-date"></p>
+
+      <div class="signatures">
+        <div>
+          <h4 data-i18n="guestSignature">KHÁCH XÁC NHẬN</h4>
+          <p data-i18n="signFullName">(Ký và ghi rõ họ tên)</p>
+          <div class="signature-line"></div>
+        </div>
+        <div>
+          <h4 data-i18n="staffSignature">NHÂN VIÊN LỄ TÂN</h4>
+          <p data-i18n="signFullName">(Ký và ghi rõ họ tên)</p>
+          <div class="signature-line"></div>
+        </div>
+      </div>
+
+      <div class="actions no-print receipt-actions">
+        <button id="printBtn" type="button" class="primary" data-i18n="print">In phiếu</button>
+        <button id="newBtn" type="button" class="secondary" data-i18n="newReceipt">Nhập khách mới</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="no-print">© <span id="year"></span> Sao Mai Phu My Resort · Phú Mỹ, Việt Nam</footer>
+  <script src="app.js"></script>
+</body>
+</html>
