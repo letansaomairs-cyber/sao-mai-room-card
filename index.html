@@ -46,6 +46,19 @@
         <input id="roomNumber" name="room_number" inputmode="numeric" autocomplete="off" required>
       </label>
       <label>
+  <span data-i18n="cardCount">Số lượng thẻ</span>
+
+  <input
+    id="cardCount"
+    name="card_count"
+    type="number"
+    min="1"
+    max="10"
+    value="1"
+    required
+  >
+</label>
+      <label>
   <span data-i18n="cardCountLabel">Số lượng thẻ</span>
 
   <input
@@ -99,13 +112,21 @@
       <div class="receipt-info">
         <p><strong data-i18n="guestNameLabel">Họ và tên khách:</strong> <span id="rGuestName"></span></p>
         <p><strong data-i18n="roomNumberLabel">Số phòng:</strong> <span id="rRoomNumber"></span></p>
-        <p><strong data-i18n="extraCardLabel">Số lượng thẻ cấp thêm:</strong> <span data-i18n="oneCard">01 thẻ</span></p>
+        <p>
+  <strong data-i18n="extraCardLabel">
+    Số lượng thẻ cấp thêm:
+  </strong>
+
+  <span id="rCardCount">01 thẻ</span>
+</p>
         <p><strong data-i18n="issuedAtLabel">Thời gian cấp:</strong> <span id="rIssuedAt"></span></p>
       </div>
 
       <div class="confirmation">
         <h3 data-i18n="confirmationTitle">XÁC NHẬN CỦA KHÁCH</h3>
-        <p data-i18n="confirmationText">Tôi xác nhận đã nhận thêm 01 thẻ phòng từ Sao Mai Phu My Resort. Tôi có trách nhiệm bảo quản và hoàn trả thẻ khi trả phòng. Nếu làm mất hoặc không hoàn trả thẻ, tôi đồng ý thanh toán phí bồi thường 200.000 VND/thẻ.</p>
+        <p id="confirmationText">
+  Tôi xác nhận đã nhận thêm 01 thẻ phòng từ Sao Mai Phu My Resort. Tôi có trách nhiệm bảo quản và hoàn trả thẻ khi trả phòng. Nếu làm mất hoặc không hoàn trả thẻ, tôi đồng ý thanh toán phí bồi thường 200.000 VND/thẻ.
+</p>
       </div>
 
       <p id="rPlaceDate" class="place-date"></p>
