@@ -1,5 +1,6 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
+let receiptIssuedDate = null;
 
 const translations = {
   vi: {
@@ -207,7 +208,26 @@ function formatDateTime(date, language) {
 
   return date.toLocaleString(locale);
 }
+function formatPlaceDate(date, language) {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
 
+  switch (language) {
+    case 'en':
+      return `Phu My, ${month}/${day}/${year}`;
+
+    case 'zh':
+      return `富美，${year}年${month}月${day}日`;
+
+    case 'ko':
+      return `푸미, ${year}년 ${month}월 ${day}일`;
+
+    case 'vi':
+    default:
+      return `Phú Mỹ, ngày ${day} tháng ${month} năm ${year}`;
+  }
+}
 
 /* =========================
    CẬP NHẬT SỐ LƯỢNG THẺ
@@ -339,9 +359,7 @@ if (requestForm) {
       translations[language].termsText(cardCount);
 
     $('#rPlaceDate').textContent =
-      translations[language].placeDate(
-        dateParts(now)
-      );
+  formatPlaceDate(now, language);
 
     $('#receipt').classList.remove('hidden');
 
