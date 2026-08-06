@@ -36,41 +36,43 @@
     </section>
 
     <form id="requestForm" class="card form-card no-print">
-      <label>
-        <span data-i18n="guestName">Tên khách</span>
-        <input id="guestName" name="guest_name" autocomplete="name" required>
-      </label>
+      <div class="form-row-three">
+  <label>
+    <span data-i18n="guestName">Tên khách</span>
+    <input
+      id="guestName"
+      name="guest_name"
+      type="text"
+      autocomplete="name"
+      required
+    >
+  </label>
 
-      <label>
-        <span data-i18n="roomNumber">Số phòng</span>
-        <input id="roomNumber" name="room_number" inputmode="numeric" autocomplete="off" required>
-      </label>
-      <label>
-  <span data-i18n="cardCount">Số lượng thẻ</span>
+  <label>
+    <span data-i18n="roomNumber">Số phòng</span>
+    <input
+      id="roomNumber"
+      name="room_number"
+      type="text"
+      autocomplete="off"
+      required
+    >
+  </label>
 
-  <input
-    id="cardCount"
-    name="card_count"
-    type="number"
-    min="1"
-    max="10"
-    value="1"
-    required
-  >
-</label>
-      <label>
-  <span data-i18n="cardCountLabel">Số lượng thẻ</span>
-
-  <input
-    id="cardCount"
-    name="card_count"
-    type="number"
-    min="1"
-    max="10"
-    value="1"
-    required
-  >
-</label>
+  <label>
+    <span data-i18n="cardCount">Số lượng thẻ</span>
+    <input
+      id="cardCount"
+      name="card_count"
+      type="number"
+      min="1"
+      max="10"
+      value="1"
+      required
+    >
+  </label>
+</div>
+     
 
       <div class="terms-box full">
         <h3 data-i18n="termsTitle">Quy định sử dụng thẻ phòng</h3>
