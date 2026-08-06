@@ -70,3 +70,27 @@ footer{text-align:center;color:var(--muted);padding:0 20px 30px}
   .place-date{margin:26px 0}
   .signature-line{height:45mm}
 }
+.form-row-three {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.7fr;
+  gap: 16px;
+  grid-column: 1 / -1;
+  align-items: end;
+}
+
+.form-row-three label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-row-three input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 760px) {
+  .form-row-three {
+    grid-template-columns: 1fr;
+  }
+}
