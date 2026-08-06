@@ -10,3 +10,4 @@ Website tĩnh để tạo và in phiếu xác nhận cấp thêm thẻ phòng.
 5. Build output directory: `/` hoặc để trống tùy giao diện Cloudflare.
 
 Không cần D1, R2 hoặc Functions.
+Updated logo deployment.
