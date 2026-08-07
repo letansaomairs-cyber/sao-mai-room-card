@@ -13,3 +13,4 @@ Bản hoàn chỉnh: tạo phiếu, in A4, 4 ngôn ngữ, quản lý bằng PIN,
 
 Logo mẫu: public/assets/sao-mai-logo.svg. Có thể thay bằng logo thật.
 Redeploy production
+Redeploy after DB binding
