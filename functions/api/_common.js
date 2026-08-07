@@ -1,0 +1,3 @@
+export function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}})}
+export function adminOK(request,env){const e=String(env.ADMIN_PIN||'').trim(),a=String(request.headers.get('x-admin-pin')||'').trim();return e&&a===e}
+export function makeCode(){const d=new Date().toISOString().slice(0,10).replaceAll('-',''),c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let t='';for(let i=0;i<4;i++)t+=c[Math.floor(Math.random()*c.length)];return `RC-${d}-${t}`}

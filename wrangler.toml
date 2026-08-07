@@ -1,0 +1,8 @@
+name = "sao-mai-room-card-v2"
+pages_build_output_dir = "./public"
+compatibility_date = "2026-08-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sao-mai-room-card-db"
+database_id = "PASTE_YOUR_D1_DATABASE_ID_HERE"

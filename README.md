@@ -1,13 +1,14 @@
-# Sao Mai Room Key Card Confirmation
+# Sao Mai Room Card Manager V2
 
-Website tĩnh để tạo và in phiếu xác nhận cấp thêm thẻ phòng.
+Bản hoàn chỉnh: tạo phiếu, in A4, 4 ngôn ngữ, quản lý bằng PIN, D1, trạng thái thẻ, bồi thường 200.000 VND/thẻ, xóa từng phiếu và xóa nhiều phiếu.
 
-## Triển khai
-1. Tạo repository GitHub mới.
-2. Upload toàn bộ file và thư mục trong dự án.
-3. Kết nối repository với Cloudflare Pages.
-4. Build command: để trống.
-5. Build output directory: `/` hoặc để trống tùy giao diện Cloudflare.
+## Cloudflare
+1. Build command: để trống
+2. Build output directory: public
+3. Tạo D1: sao-mai-room-card-db
+4. Chạy schema.sql trong D1 Console
+5. Pages Settings > Bindings > Add D1 binding: DB -> sao-mai-room-card-db
+6. Settings > Variables and Secrets > ADMIN_PIN -> PIN bạn chọn
+7. Redeploy
 
-Không cần D1, R2 hoặc Functions.
-Updated logo deployment.
+Logo mẫu: public/assets/sao-mai-logo.svg. Có thể thay bằng logo thật.
