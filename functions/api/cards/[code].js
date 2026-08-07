@@ -18,7 +18,6 @@ export async function onRequestPatch({ request, params, env }) {
     }
 
     const now = new Date().toISOString();
-
     const cardCount = Number(item.card_count) || 1;
 
     let returnedCount = Number(item.returned_count) || 0;
@@ -26,15 +25,11 @@ export async function onRequestPatch({ request, params, env }) {
     let compensationAmount = Number(item.compensation_amount) || 0;
     let status = item.status;
 
-    const remaining = () =>
-      Math.max(
-        0,
-        cardCount - returnedCount - lostCount
-      );
+    const remaining = () => Math.max(
+      0,
+      cardCount - returnedCount - lostCount
+    );
 
-    /* =========================
-       TRẢ TỪNG THẺ
-    ========================= */
     if (body.action === 'return_cards') {
       const available = remaining();
 
@@ -51,29 +46,18 @@ export async function onRequestPatch({ request, params, env }) {
       );
 
       returnedCount += qty;
+      const left = Math.max(0, cardCount - returnedCount - lostCount);
 
-      const left =
-        cardCount - returnedCount - lostCount;
-
-      if (left <= 0) {
+      if (left === 0) {
         if (lostCount > 0) {
-          // Có thẻ đã mất:
-          // nếu đã thu phí thì giữ trạng thái paid,
-          // nếu chưa thu thì giữ lost.
-          status =
-            item.status === 'paid'
-              ? 'paid'
-              : 'lost';
+          status = item.status === 'paid' ? 'paid' : 'lost';
         } else {
           status = 'returned';
         }
       } else {
-        // Vẫn còn thẻ khách đang giữ.
-        // Nếu đang lost/paid thì giữ trạng thái đó.
-        if (
-          item.status !== 'lost' &&
-          item.status !== 'paid'
-        ) {
+        if (item.status === 'lost' || item.status === 'paid') {
+          status = item.status;
+        } else {
           status = 'active';
         }
       }
@@ -81,18 +65,10 @@ export async function onRequestPatch({ request, params, env }) {
       await env.DB
         .prepare(`
           UPDATE room_card_requests
-          SET
-            returned_count=?,
-            status=?,
-            updated_at=?
+          SET returned_count=?, status=?, updated_at=?
           WHERE code=?
         `)
-        .bind(
-          returnedCount,
-          status,
-          now,
-          params.code
-        )
+        .bind(returnedCount, status, now, params.code)
         .run();
 
       await env.DB
@@ -104,24 +80,19 @@ export async function onRequestPatch({ request, params, env }) {
         .bind(
           params.code,
           'cards_returned',
-          `Trả ${qty} thẻ. Đã trả ${returnedCount}, mất ${lostCount}, còn ${Math.max(0, left)}`,
+          `Trả ${qty} thẻ. Đã trả ${returnedCount}, mất ${lostCount}, còn ${left}`,
           now
         )
         .run();
 
       return json(
         await env.DB
-          .prepare(
-            'SELECT * FROM room_card_requests WHERE code=?'
-          )
+          .prepare('SELECT * FROM room_card_requests WHERE code=?')
           .bind(params.code)
           .first()
       );
     }
 
-    /* =========================
-       BÁO MẤT
-    ========================= */
     if (body.status === 'lost') {
       const available = remaining();
 
@@ -137,31 +108,17 @@ export async function onRequestPatch({ request, params, env }) {
         )
       );
 
-      // Cộng thêm, KHÔNG ghi đè số mất cũ
       lostCount += qty;
-
-      compensationAmount =
-        lostCount * 200000;
-
+      compensationAmount = lostCount * 200000;
       status = 'lost';
 
       await env.DB
         .prepare(`
           UPDATE room_card_requests
-          SET
-            status=?,
-            lost_count=?,
-            compensation_amount=?,
-            updated_at=?
+          SET status=?, lost_count=?, compensation_amount=?, updated_at=?
           WHERE code=?
         `)
-        .bind(
-          status,
-          lostCount,
-          compensationAmount,
-          now,
-          params.code
-        )
+        .bind(status, lostCount, compensationAmount, now, params.code)
         .run();
 
       await env.DB
@@ -180,18 +137,17 @@ export async function onRequestPatch({ request, params, env }) {
 
       return json(
         await env.DB
-          .prepare(
-            'SELECT * FROM room_card_requests WHERE code=?'
-          )
+          .prepare('SELECT * FROM room_card_requests WHERE code=?')
           .bind(params.code)
           .first()
       );
     }
 
-    /* =========================
-       ĐÃ THU PHÍ
-    ========================= */
     if (body.status === 'paid') {
+      if (lostCount <= 0) {
+        return json({ error: 'Phiếu này không có thẻ mất để thu phí' }, 400);
+      }
+
       status = 'paid';
 
       await env.DB
@@ -200,11 +156,7 @@ export async function onRequestPatch({ request, params, env }) {
           SET status=?, updated_at=?
           WHERE code=?
         `)
-        .bind(
-          status,
-          now,
-          params.code
-        )
+        .bind(status, now, params.code)
         .run();
 
       await env.DB
@@ -223,17 +175,12 @@ export async function onRequestPatch({ request, params, env }) {
 
       return json(
         await env.DB
-          .prepare(
-            'SELECT * FROM room_card_requests WHERE code=?'
-          )
+          .prepare('SELECT * FROM room_card_requests WHERE code=?')
           .bind(params.code)
           .first()
       );
     }
 
-    /* =========================
-       HỦY PHIẾU
-    ========================= */
     if (body.status === 'cancelled') {
       status = 'cancelled';
 
@@ -243,27 +190,32 @@ export async function onRequestPatch({ request, params, env }) {
           SET status=?, updated_at=?
           WHERE code=?
         `)
+        .bind(status, now, params.code)
+        .run();
+
+      await env.DB
+        .prepare(`
+          INSERT INTO room_card_logs
+          (request_code, action, detail, created_at)
+          VALUES (?, ?, ?, ?)
+        `)
         .bind(
-          status,
-          now,
-          params.code
+          params.code,
+          'cancelled',
+          'Phiếu đã được hủy',
+          now
         )
         .run();
 
       return json(
         await env.DB
-          .prepare(
-            'SELECT * FROM room_card_requests WHERE code=?'
-          )
+          .prepare('SELECT * FROM room_card_requests WHERE code=?')
           .bind(params.code)
           .first()
       );
     }
 
-    return json(
-      { error: 'Thao tác không hợp lệ' },
-      400
-    );
+    return json({ error: 'Thao tác không hợp lệ' }, 400);
 
   } catch (error) {
     return json({
@@ -272,21 +224,14 @@ export async function onRequestPatch({ request, params, env }) {
   }
 }
 
-
-export async function onRequestDelete({
-  request,
-  params,
-  env
-}) {
+export async function onRequestDelete({ request, params, env }) {
   if (!adminOK(request, env)) {
     return json({ error: 'Sai mã PIN quản trị' }, 401);
   }
 
   try {
     const item = await env.DB
-      .prepare(
-        'SELECT code FROM room_card_requests WHERE code=?'
-      )
+      .prepare('SELECT code FROM room_card_requests WHERE code=?')
       .bind(params.code)
       .first();
 
@@ -295,16 +240,12 @@ export async function onRequestDelete({
     }
 
     await env.DB
-      .prepare(
-        'DELETE FROM room_card_logs WHERE request_code=?'
-      )
+      .prepare('DELETE FROM room_card_logs WHERE request_code=?')
       .bind(params.code)
       .run();
 
     await env.DB
-      .prepare(
-        'DELETE FROM room_card_requests WHERE code=?'
-      )
+      .prepare('DELETE FROM room_card_requests WHERE code=?')
       .bind(params.code)
       .run();
 
