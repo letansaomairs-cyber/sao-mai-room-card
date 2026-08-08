@@ -699,7 +699,9 @@ function RA(){
           >
         </td>
 
-        <td>${E(x.code)}</td>
+       <td class="code-cell" title="${E(x.code)}">
+  ${E('…' + String(x.code).slice(-4))}
+</td>
         <td>${E(x.guest_name)}</td>
         <td>${E(x.room_number)}</td>
 
