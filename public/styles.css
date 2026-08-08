@@ -92,13 +92,121 @@
   gap:8px;
 }
 
+/* ===== LỊCH SỬ THẺ PHÒNG - BỐ CỤC ĐẸP ===== */
+
+.history-row td{
+  padding:8px 14px 14px !important;
+  background:#fffdf9;
+  border-top:0 !important;
+}
+
+.history-box{
+  width:100%;
+  box-sizing:border-box;
+  padding:16px 18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fffaf2;
+}
+
+.history-title{
+  margin-bottom:12px;
+  color:var(--wine);
+  font-weight:700;
+  font-size:14px;
+}
+
+.history-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
 .history-item{
   display:grid;
-  grid-template-columns:175px 16px 95px 1fr;
+  grid-template-columns:165px 14px 150px minmax(280px,1fr);
   align-items:start;
-  gap:6px;
+  column-gap:8px;
   font-size:13px;
   line-height:1.45;
+}
+
+.history-time{
+  color:#777;
+  white-space:nowrap;
+}
+
+.history-dot{
+  color:var(--gold);
+  text-align:center;
+  font-weight:700;
+}
+
+.history-action{
+  color:var(--wine);
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.history-detail{
+  color:var(--ink);
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+
+.history-loading,
+.history-empty{
+  color:var(--muted);
+  font-size:13px;
+}
+
+
+/* TABLET */
+@media(max-width:1100px){
+
+  .history-item{
+    grid-template-columns:145px 12px 135px minmax(220px,1fr);
+    font-size:12.5px;
+  }
+
+}
+
+
+/* MOBILE */
+@media(max-width:750px){
+
+  .history-box{
+    padding:14px;
+  }
+
+  .history-item{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:2px;
+    padding:8px 0;
+    border-bottom:1px dashed var(--line);
+  }
+
+  .history-item:last-child{
+    border-bottom:0;
+  }
+
+  .history-dot{
+    display:none;
+  }
+
+  .history-time{
+    font-size:11px;
+  }
+
+  .history-action{
+    font-size:13px;
+  }
+
+  .history-detail{
+    padding-left:0;
+  }
+
 }
 
 .history-time{
