@@ -250,3 +250,67 @@
     font-size:12px;
   }
 }
+/* ===== LÀM GỌN BẢNG QUẢN LÝ ===== */
+
+.table-wrap table{
+  width:100%;
+  table-layout:fixed;
+}
+
+.table-wrap th:nth-child(1),
+.table-wrap td:nth-child(1){
+  width:32px;
+}
+
+.table-wrap th:nth-child(2),
+.table-wrap td:nth-child(2){
+  width:75px;
+}
+
+.table-wrap th:nth-child(3),
+.table-wrap td:nth-child(3){
+  width:135px;
+}
+
+.table-wrap th:nth-child(4),
+.table-wrap td:nth-child(4){
+  width:65px;
+}
+
+.table-wrap th:nth-child(5),
+.table-wrap td:nth-child(5){
+  width:135px;
+}
+
+.table-wrap th:nth-child(6),
+.table-wrap td:nth-child(6){
+  width:145px;
+}
+
+.table-wrap th:nth-child(7),
+.table-wrap td:nth-child(7){
+  width:190px;
+}
+
+.table-wrap th:nth-child(8),
+.table-wrap td:nth-child(8){
+  width:230px;
+}
+
+.code-cell{
+  white-space:nowrap;
+  font-weight:600;
+}
+
+.table-wrap td{
+  overflow-wrap:anywhere;
+}
+
+.table-wrap td small{
+  white-space:normal;
+  line-height:1.35;
+}
+
+.actions-cell{
+  white-space:normal;
+}
