@@ -542,8 +542,10 @@ function LOG_DETAIL(log){
      LOG KHÔNG XÁC ĐỊNH
   ===================================================== */
 
-  return s || LOG_LABEL(action);
+return s || LOG_LABEL(action);
 }
+
+function HISTORY_HTML(code){
   const logs = historyCache[code];
 
   if(!logs){
