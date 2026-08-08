@@ -80,24 +80,44 @@ function RA(){
     const remaining = REM(x);
     const compensation = Number(x.compensation_amount || 0);
 
-    let statusExtra = '';
+   let statusExtra = '';
 
-    // Nếu vẫn còn thẻ khách giữ nhưng đã từng mất/đền thẻ,
-    // trạng thái chính vẫn là "Đang sử dụng".
-    if(status === 'active' && lost > 0){
-      if(x.status === 'paid'){
-        statusExtra =
-          `<br><small>Đã thu phí ${lost} thẻ · ${M(compensation)}</small>`;
-      }else{
-        statusExtra =
-          `<br><small>Đã báo mất ${lost} thẻ · ${M(compensation)}</small>`;
-      }
-    }else if(
-      (status === 'lost' || status === 'paid') &&
-      compensation > 0
-    ){
-      statusExtra = `<br><small>${M(compensation)}</small>`;
-    }
+if(status === 'active' && lost > 0){
+
+  if(x.status === 'paid'){
+    statusExtra = `
+      <br>
+      <small>
+        ${M(compensation)} · Đã thu phí
+      </small>
+    `;
+  }else{
+    statusExtra = `
+      <br>
+      <small>
+        ${M(compensation)} · Chưa thu phí
+      </small>
+    `;
+  }
+
+}else if(status === 'lost'){
+
+  statusExtra = `
+    <br>
+    <small>
+      ${M(compensation)} · Chưa thu phí
+    </small>
+  `;
+
+}else if(status === 'paid'){
+
+  statusExtra = `
+    <br>
+    <small>
+      ${M(compensation)} · Đã thu phí
+    </small>
+  `;
+}
 
     return `
       <tr>
