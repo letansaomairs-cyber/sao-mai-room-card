@@ -103,29 +103,257 @@ function EFFECTIVE_STATUS(x){
 }
 
 function LOG_LABEL(action){
+  const l = L();
+
   const labels = {
-    created: 'Cấp thẻ',
-    cards_returned: 'Trả thẻ',
-    cards_lost: 'Báo mất',
-    compensation_paid: 'Thu phí',
-    cancelled: 'Hủy phiếu'
+    vi: {
+      created: 'Cấp thẻ',
+      cards_returned: 'Trả thẻ',
+      cards_lost: 'Báo mất',
+      compensation_paid: 'Thu phí',
+      cancelled: 'Hủy phiếu',
+      status_changed: 'Cập nhật trạng thái'
+    },
+
+    en: {
+      created: 'Card issued',
+      cards_returned: 'Card returned',
+      cards_lost: 'Card lost',
+      compensation_paid: 'Fee collected',
+      cancelled: 'Receipt cancelled',
+      status_changed: 'Status updated'
+    },
+
+    zh: {
+      created: '发放房卡',
+      cards_returned: '归还房卡',
+      cards_lost: '房卡遗失',
+      compensation_paid: '收取赔偿费',
+      cancelled: '取消确认单',
+      status_changed: '更新状态'
+    },
+
+    ko: {
+      created: '카드 발급',
+      cards_returned: '카드 반납',
+      cards_lost: '카드 분실',
+      compensation_paid: '배상금 수납',
+      cancelled: '확인서 취소',
+      status_changed: '상태 변경'
+    }
   };
-  return labels[action] || action || 'Cập nhật';
+
+  return labels[l]?.[action] || action || '';
 }
 
-function LOG_DETAIL(log){
-  let s = String(log.detail || '');
 
-  // Việt hóa log tạo phiếu cũ: "Issued 3 card(s)"
-  const issued = s.match(/Issued\s+(\d+)\s+card/i);
-  if(issued){
-    return `Cấp ${issued[1]} thẻ`;
+function LOG_DETAIL(log){
+  const l = L();
+  const action = log.action || '';
+  const s = String(log.detail || '');
+
+  /* =========================
+     CẤP THẺ
+  ========================= */
+
+  if(action === 'created'){
+    const m =
+      s.match(/Issued\s+(\d+)\s+card/i) ||
+      s.match(/Cấp\s+(\d+)\s+thẻ/i);
+
+    const qty = Number(m?.[1] || 0);
+
+    if(l === 'en')
+      return `Issued ${qty} ${qty === 1 ? 'card' : 'cards'}`;
+
+    if(l === 'zh')
+      return `发放 ${qty} 张房卡`;
+
+    if(l === 'ko')
+      return `객실 카드 ${qty}장 발급`;
+
+    return `Cấp ${qty} thẻ`;
   }
 
-  // Định dạng các số tiền dạng "... 200000 VND"
-  s = s.replace(/(\d{5,})\s*VND/gi, (_, n) => M(Number(n)));
 
-  return s || LOG_LABEL(log.action);
+  /* =========================
+     TRẢ THẺ
+  ========================= */
+
+  if(action === 'cards_returned'){
+    const qty =
+      Number(
+        s.match(/Trả\s+(\d+)\s+thẻ/i)?.[1] ||
+        s.match(/Return(?:ed)?\s+(\d+)/i)?.[1] ||
+        0
+      );
+
+    const returned =
+      Number(
+        s.match(/Đã trả\s+(\d+)/i)?.[1] || 0
+      );
+
+    const lost =
+      Number(
+        s.match(/mất\s+(\d+)/i)?.[1] || 0
+      );
+
+    const remaining =
+      Number(
+        s.match(/còn\s+(\d+)/i)?.[1] || 0
+      );
+
+    if(l === 'en')
+      return `Returned ${qty} card(s). Returned: ${returned}, lost: ${lost}, remaining: ${remaining}`;
+
+    if(l === 'zh')
+      return `归还 ${qty} 张。已归还：${returned}，遗失：${lost}，剩余：${remaining}`;
+
+    if(l === 'ko')
+      return `${qty}장 반납. 반납: ${returned}, 분실: ${lost}, 남음: ${remaining}`;
+
+    return `Trả ${qty} thẻ. Đã trả ${returned}, mất ${lost}, còn ${remaining}`;
+  }
+
+
+  /* =========================
+     BÁO MẤT
+  ========================= */
+
+  if(action === 'cards_lost'){
+    const qty =
+      Number(
+        s.match(/Báo mất(?: thêm)?\s+(\d+)\s+thẻ/i)?.[1] ||
+        0
+      );
+
+    const totalLost =
+      Number(
+        s.match(/Tổng mất\s+(\d+)/i)?.[1] ||
+        qty
+      );
+
+    if(l === 'en')
+      return `Reported ${qty} lost card(s). Total lost: ${totalLost}`;
+
+    if(l === 'zh')
+      return `报告遗失 ${qty} 张房卡。累计遗失：${totalLost} 张`;
+
+    if(l === 'ko')
+      return `${qty}장 분실 신고. 총 분실: ${totalLost}장`;
+
+    return `Báo mất ${qty} thẻ. Tổng mất ${totalLost}`;
+  }
+
+
+  /* =========================
+     THU PHÍ
+  ========================= */
+
+  if(action === 'compensation_paid'){
+    const qty =
+      Number(
+        s.match(/Thu phí\s+(\d+)\s+thẻ/i)?.[1] ||
+        s.match(/Đã thu\s+(\d+)\/\d+\s+thẻ/i)?.[1] ||
+        1
+      );
+
+    let amount = 0;
+
+    const amountMatch =
+      s.match(/=\s*(\d+)\s*VND/i) ||
+      s.match(/Đã thu\s+(\d+)\s*VND/i);
+
+    if(amountMatch){
+      amount = Number(amountMatch[1]);
+    }else{
+      amount = qty * 200000;
+    }
+
+    if(l === 'en')
+      return `Collected ${M(amount)} for ${qty} lost card(s)`;
+
+    if(l === 'zh')
+      return `已收取 ${M(amount)}，对应 ${qty} 张遗失房卡`;
+
+    if(l === 'ko')
+      return `분실 카드 ${qty}장 배상금 ${M(amount)} 수납`;
+
+    return `Thu phí ${qty} thẻ · ${M(amount)}`;
+  }
+
+
+  /* =========================
+     HỦY PHIẾU
+  ========================= */
+
+  if(action === 'cancelled'){
+    if(l === 'en') return 'Receipt cancelled';
+    if(l === 'zh') return '确认单已取消';
+    if(l === 'ko') return '확인서가 취소되었습니다';
+    return 'Phiếu đã được hủy';
+  }
+
+
+  /* =========================
+     ĐỔI TRẠNG THÁI CŨ
+  ========================= */
+
+  if(action === 'status_changed'){
+    const status =
+      s.split('→').pop()?.trim() ||
+      s.split('->').pop()?.trim() ||
+      '';
+
+    const map = {
+      active: {
+        vi:'Đang sử dụng',
+        en:'In use',
+        zh:'使用中',
+        ko:'사용 중'
+      },
+      returned: {
+        vi:'Đã hoàn trả',
+        en:'Returned',
+        zh:'已归还',
+        ko:'반납 완료'
+      },
+      lost: {
+        vi:'Báo mất',
+        en:'Lost',
+        zh:'遗失',
+        ko:'분실'
+      },
+      paid: {
+        vi:'Đã thu phí',
+        en:'Fee paid',
+        zh:'已收费',
+        ko:'요금 납부'
+      },
+      cancelled: {
+        vi:'Đã hủy',
+        en:'Cancelled',
+        zh:'已取消',
+        ko:'취소'
+      }
+    };
+
+    const translated =
+      map[status]?.[l] || status;
+
+    if(l === 'en')
+      return `Status changed to ${translated}`;
+
+    if(l === 'zh')
+      return `状态更新为：${translated}`;
+
+    if(l === 'ko')
+      return `상태 변경: ${translated}`;
+
+    return `Cập nhật trạng thái: ${translated}`;
+  }
+
+  return s;
 }
 
 function HISTORY_HTML(code){
