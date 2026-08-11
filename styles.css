@@ -317,3 +317,44 @@
 
 /* ===== QUẢN LÝ VÉ BƠI THÁNG ===== */
 .pool-form{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:12px;align-items:end;margin:22px 0;padding:18px;background:#fffaf2;border:1px solid var(--line);border-radius:14px}.pool-form label{font-size:13px}.pool-form .pool-note{grid-column:1/4}.pool-form button{height:47px}.pool-filters{display:grid;grid-template-columns:1fr 190px 210px auto;gap:10px;margin:16px 0}.pool-table th,.pool-table td{white-space:normal}.pool-table table{min-width:900px}.pool-table th:nth-child(1){width:22%}.pool-table th:nth-child(2){width:16%}.pool-status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700}.pool-status.valid{background:#e8f7ef;color:#08733b}.pool-status.soon{background:#fff4d8;color:#9a6500}.pool-status.expired{background:#fff0f1;color:#a41324}.pool-days{font-weight:700}.pool-actions{display:flex;gap:6px;flex-wrap:wrap}.pool-actions button{padding:8px 10px;font-size:12px}@media(max-width:800px){.pool-form,.pool-filters{grid-template-columns:1fr}.pool-form .pool-note{grid-column:auto}}
+
+/* Fix vé bơi tháng: giữ ngày trên một dòng */
+.pool-table th:nth-child(3),
+.pool-table td:nth-child(3),
+.pool-table th:nth-child(4),
+.pool-table td:nth-child(4){
+  white-space:nowrap!important;
+  min-width:118px;
+}
+
+
+/* ===== Vé bơi tháng - bố cục chuẩn desktop ===== */
+.pool-card{overflow:hidden}
+.pool-form{grid-template-columns:1.35fr 1.1fr 1fr 1fr;gap:12px 14px;padding:20px 18px}
+.pool-form label span{font-size:13px;font-weight:700}
+.pool-form input,.pool-form select{height:46px}
+.pool-form .pool-note{grid-column:1/4}
+.pool-form>button{height:46px;min-width:180px}
+.pool-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pool-filters{grid-template-columns:minmax(280px,1fr) 190px 210px auto;align-items:center}
+.pool-filters>*{height:48px}
+.pool-table{overflow-x:auto}
+.pool-table table{width:100%;min-width:1050px;table-layout:fixed}
+.pool-table th,.pool-table td{padding:14px 12px;vertical-align:middle;line-height:1.3}
+.pool-table th{white-space:nowrap!important}
+.pool-table th:nth-child(1),.pool-table td:nth-child(1){width:22%}
+.pool-table th:nth-child(2),.pool-table td:nth-child(2){width:15%}
+.pool-table th:nth-child(3),.pool-table td:nth-child(3){width:13%;white-space:nowrap!important}
+.pool-table th:nth-child(4),.pool-table td:nth-child(4){width:13%;white-space:nowrap!important}
+.pool-table th:nth-child(5),.pool-table td:nth-child(5){width:11%;white-space:nowrap!important}
+.pool-table th:nth-child(6),.pool-table td:nth-child(6){width:12%;white-space:nowrap!important}
+.pool-table th:nth-child(7),.pool-table td:nth-child(7){width:14%;white-space:nowrap!important}
+.pool-days{font-weight:800}
+.pool-actions{display:flex;gap:6px;flex-wrap:nowrap;justify-content:flex-start}
+.pool-actions button{padding:8px 10px;font-size:12px;white-space:nowrap}
+.pool-status{white-space:nowrap}
+/* Flatpickr: hiển thị DD/MM/YYYY nhưng gửi Y-m-d cho API */
+.pool-form .flatpickr-input[readonly]{background:#fff}
+.pool-form input.form-control.input{font-weight:600}
+@media(max-width:980px){.pool-form{grid-template-columns:1fr 1fr}.pool-form .pool-note{grid-column:1/-1}.pool-form>button{grid-column:1/-1}.pool-filters{grid-template-columns:1fr 1fr}.pool-filters button{grid-column:1/-1}.pool-stats{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.pool-form,.pool-filters,.pool-stats{grid-template-columns:1fr}.pool-form .pool-note,.pool-form>button{grid-column:auto}}
