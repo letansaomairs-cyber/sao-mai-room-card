@@ -314,3 +314,6 @@
 .actions-cell{
   white-space:normal;
 }
+
+/* ===== QUẢN LÝ VÉ BƠI THÁNG ===== */
+.pool-form{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:12px;align-items:end;margin:22px 0;padding:18px;background:#fffaf2;border:1px solid var(--line);border-radius:14px}.pool-form label{font-size:13px}.pool-form .pool-note{grid-column:1/4}.pool-form button{height:47px}.pool-filters{display:grid;grid-template-columns:1fr 190px 210px auto;gap:10px;margin:16px 0}.pool-table th,.pool-table td{white-space:normal}.pool-table table{min-width:900px}.pool-table th:nth-child(1){width:22%}.pool-table th:nth-child(2){width:16%}.pool-status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700}.pool-status.valid{background:#e8f7ef;color:#08733b}.pool-status.soon{background:#fff4d8;color:#9a6500}.pool-status.expired{background:#fff0f1;color:#a41324}.pool-days{font-weight:700}.pool-actions{display:flex;gap:6px;flex-wrap:wrap}.pool-actions button{padding:8px 10px;font-size:12px}@media(max-width:800px){.pool-form,.pool-filters{grid-template-columns:1fr}.pool-form .pool-note{grid-column:auto}}

@@ -4,3 +4,7 @@ CREATE INDEX IF NOT EXISTS idx_room_card_room ON room_card_requests(room_number)
 CREATE INDEX IF NOT EXISTS idx_room_card_issued ON room_card_requests(issued_at);
 CREATE TABLE IF NOT EXISTS room_card_logs (id INTEGER PRIMARY KEY AUTOINCREMENT,request_code TEXT NOT NULL,action TEXT NOT NULL,detail TEXT,created_at TEXT NOT NULL);
 CREATE INDEX IF NOT EXISTS idx_room_card_logs_code ON room_card_logs(request_code);
+CREATE TABLE IF NOT EXISTS pool_monthly_passes (id INTEGER PRIMARY KEY AUTOINCREMENT, guest_name TEXT NOT NULL, pass_type TEXT NOT NULL CHECK(pass_type IN ('large','small')), start_date TEXT NOT NULL, end_date TEXT NOT NULL, notes TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_pool_pass_guest ON pool_monthly_passes(guest_name);
+CREATE INDEX IF NOT EXISTS idx_pool_pass_end ON pool_monthly_passes(end_date);
+CREATE INDEX IF NOT EXISTS idx_pool_pass_type ON pool_monthly_passes(pass_type);
